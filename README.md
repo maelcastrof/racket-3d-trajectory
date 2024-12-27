@@ -19,8 +19,7 @@
 3. Save these images in the directory `img/chessboard/`.
 
 ### Step 2: Run Calibration
-1. Ensure your images are in the `img/chessboard/` directory.
-2. Run the calibration script:
+1. Run the calibration script:
    ```bash
    python calibration.py
    ```
