@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-import glob
 
 CHESSBOARD_SIZE = (9, 6)
 SQUARE_SIZE = 25
@@ -12,26 +11,37 @@ objp *= SQUARE_SIZE
 objpoints = []  # 3D points
 imgpoints = []  # 2D points
 
-# Load chessboard images
-images = glob.glob('img/chessboard/*.jpg')
-print(f"Found {len(images)} images for calibration.")
+# Video input path
+video_path = 'data/calibration/Calibration_45.MOV'  # Replace with the path to your video
 
+# Open the video file
+cap = cv2.VideoCapture(video_path)
+if not cap.isOpened():
+    raise ValueError(f"Could not open video file: {video_path}")
+
+frame_count = 0
 gray = None
 
-for fname in images:
-    img = cv2.imread(fname)
-    if img is None:
-        print(f"Could not load image: {fname}")
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        print("End of video or error reading frame.")
+        break
+
+    frame_count += 1
+
+    # Process every nth frame to save time (e.g., every 10th frame)
+    if frame_count % 10 != 0:
         continue
 
-    print(f"Processing image: {fname}")
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    print(f"Processing frame {frame_count}")
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     # Find chessboard corners
     ret, corners = cv2.findChessboardCorners(gray, CHESSBOARD_SIZE, None)
 
     if ret:
-        print(f"Chessboard detected in {fname}")
+        print(f"Chessboard detected in frame {frame_count}")
         objpoints.append(objp)
 
         corners2 = cv2.cornerSubPix(
@@ -40,17 +50,19 @@ for fname in images:
         )
         imgpoints.append(corners2)
 
-        cv2.drawChessboardCorners(img, CHESSBOARD_SIZE, corners2, ret)
-        cv2.imshow('Chessboard', img)
-        cv2.waitKey(500)
+        # Draw and display the corners
+        cv2.drawChessboardCorners(frame, CHESSBOARD_SIZE, corners2, ret)
+        cv2.imshow('Chessboard Detection', frame)
+        cv2.waitKey(1)  # Adjust waitKey for smoother playback if needed
     else:
-        print(f"No chessboard detected in {fname}. Skipping.")
+        print(f"No chessboard detected in frame {frame_count}. Skipping.")
 
+cap.release()
 cv2.destroyAllWindows()
 
 # Verify calibration data
 if len(objpoints) == 0 or len(imgpoints) == 0:
-    raise ValueError("No valid data for calibration. Check your images and chessboard visibility.")
+    raise ValueError("No valid data for calibration. Check your video and chessboard visibility.")
 
 # Perform camera calibration
 ret, camera_matrix, dist_coeffs, rvecs, tvecs = cv2.calibrateCamera(
