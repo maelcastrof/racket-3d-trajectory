@@ -1,5 +1,7 @@
 # IACV Project racket-3d-trajectory
 
+This project involves detecting and tracking a ping pong racket in videos using computer vision techniques. It includes camera calibration, color detection, and racket tracking.
+
 ## Installation
 1. Clone the repository:
    ```bash
