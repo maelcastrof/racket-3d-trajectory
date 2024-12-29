@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import os
 
 CHESSBOARD_SIZE = (9, 6)
 SQUARE_SIZE = 25
@@ -12,7 +13,7 @@ objpoints = []  # 3D points
 imgpoints = []  # 2D points
 
 # Video input path
-video_path = '../data/calibration/Calibration_45.MOV' 
+video_path = os.path.join(os.path.dirname(__file__), '../data/calibration/Calibration_45.MOV')
 
 # Open the video file
 cap = cv2.VideoCapture(video_path)
