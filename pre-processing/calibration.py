@@ -13,7 +13,7 @@ objpoints = []  # 3D points
 imgpoints = []  # 2D points
 
 # Video input path
-video_path = os.path.join(os.path.dirname(__file__), '../data/calibration/Calibration_45.MOV')
+video_path = os.path.join(os.path.dirname(__file__), '../data/calibration/Calibration_latera.MOV')
 
 # Open the video file
 cap = cv2.VideoCapture(video_path)
@@ -54,7 +54,7 @@ while True:
         # Draw and display the corners
         cv2.drawChessboardCorners(frame, CHESSBOARD_SIZE, corners2, ret)
         cv2.imshow('Chessboard Detection', frame)
-        cv2.waitKey(1)  # Adjust waitKey for smoother playback if needed
+        #cv2.waitKey(1)  # Adjust waitKey for smoother playback if needed
     else:
         print(f"No chessboard detected in frame {frame_count}. Skipping.")
 

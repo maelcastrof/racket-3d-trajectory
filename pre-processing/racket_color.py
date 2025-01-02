@@ -1,9 +1,12 @@
 import cv2
 import numpy as np
-
-# Load the sample image
-image_path = '../data/input/racket_color.jpg'  
+import os
+# Relative path to the data folder
+data_folder = os.path.join(os.path.dirname(__file__), '../data')
+# Upload the image
+image_path = os.path.join(os.path.dirname(__file__), '../data/frames/frame_0244.png')
 image = cv2.imread(image_path)
+
 
 if image is None:
     raise ValueError(f"Could not load image: {image_path}")
