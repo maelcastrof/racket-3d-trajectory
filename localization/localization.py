@@ -12,16 +12,16 @@ table_height = 0.76  # Height of the tabletop (optional)
 world_points = np.array([
     [0, 0, 0],                           # Bottom-left corner (P0)
     [-table_width, 0, 0],                # Bottom-right corner (P1)
-    [0, table_length / 2, 0],            # 1/2 top-left corner (P2)
-    [-table_width, table_length / 4, 0]  # 1/4 top-right corner (P4)
+    [0, (table_length / 2), 0],            # 1/2 top-left corner (P2)
+    [-table_width, (table_length / 2)-0.22, 0]  # 1/4 top-right corner (P4)
 ], dtype=np.float32)
 
 # Image coordinates (in pixels)
 image_points = np.array([
     [733, 735],   # Bottom-left corner (P0)
     [1333, 630],  # Bottom-right corner (P1)
-    [1881, 937],  # 1/2 top-left corner (P2)
-    [1637, 649],  # 1/4 top-right corner (P4)
+    [1876, 938],  # 4/5 top-left corner (P2)
+    [1891, 666]  # 4/5 top-right corner (P4)
 ], dtype=np.float32)
 
 # Camera matrix and distortion coefficients (example values)
@@ -60,8 +60,17 @@ fig = plt.figure(figsize=(10, 7))
 ax = fig.add_subplot(111, projection='3d')
 
 # Plot only P0 as a point
-ax.scatter(world_points[0, 0], world_points[0, 1], world_points[0, 2], c='b', label='P0 (Table Corner)')
+ax.scatter(world_points[0, 0], world_points[0, 1], world_points[0, 2], c='b', label='P0')
 ax.text(world_points[0, 0], world_points[0, 1], world_points[0, 2], 'P0', color='blue')
+
+ax.scatter(world_points[1, 0], world_points[1, 1], world_points[1, 2], c='b', label='P1')
+ax.text(world_points[1, 0], world_points[1, 1], world_points[1, 2], 'P1', color='blue')
+
+ax.scatter(world_points[2, 0], world_points[2, 1], world_points[2, 2], c='b', label='P2')
+ax.text(world_points[2, 0], world_points[2, 1], world_points[2, 2], 'P2', color='blue')
+
+ax.scatter(world_points[3, 0], world_points[3, 1], world_points[3, 2], c='b', label='P3')
+ax.text(world_points[3, 0], world_points[3, 1], world_points[3, 2], 'P3', color='blue')
 
 # Full table coordinates for shading (corners)
 full_table_points = np.array([
@@ -106,15 +115,26 @@ ax.set_ylabel('Y (m)')
 ax.set_zlabel('Z (m)')
 
 # Adjust axis limits to include the camera
-x_min = min(-table_width - 0.5, camera_x - 0.5)
-x_max = max(0.5, camera_x + 0.5)
-y_min = min(-0.5, camera_y - 0.5)
-y_max = max(table_length + 0.5, camera_y + 0.5)
-z_max = max(2, camera_z + 0.5)
 
-ax.set_xlim(x_min, x_max)
-ax.set_ylim(y_min, y_max)
-ax.set_zlim(0, z_max)
+# Ajustar los límites de los ejes para que todos tengan la misma escala
+x_limits = [-table_width, 0]
+y_limits = [0, table_length]
+z_limits = [0, max(camera_z, 0)]  # Considerar la posición de la cámara o el plano de la mesa
+
+# Determinar el rango máximo entre los ejes
+max_range = max(abs(x_limits[1] - x_limits[0]), abs(y_limits[1] - y_limits[0]), abs(z_limits[1] - z_limits[0]))
+
+# Ajustar los límites para todos los ejes con el mismo rango
+mid_x = (x_limits[0] + x_limits[1]) / 2
+mid_y = (y_limits[0] + y_limits[1]) / 2
+mid_z = (z_limits[0] + z_limits[1]) / 2
+
+ax.set_xlim(-2, 2)
+ax.set_ylim(mid_y - max_range / 2, mid_y + max_range / 2)
+ax.set_zlim(mid_z - max_range / 2, mid_z + max_range / 2)
+
+# Añadir proporción uniforme a los ejes
+ax.set_box_aspect([1, 1, 1])  # Escalas iguales en X, Y, Z
 
 # Add a legend and title
 plt.legend()
