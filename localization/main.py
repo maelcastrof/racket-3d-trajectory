@@ -150,5 +150,5 @@ def main(video_path):
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    video_path = "../../data/input/Black_red_rigth2_45_play.mp4"  # Replace with your video file
+    video_path = "../data/input/Black_red_rigth2_45_play.mp4"  # Replace with your video file
     main(video_path)
