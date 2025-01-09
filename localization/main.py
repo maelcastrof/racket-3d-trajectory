@@ -4,6 +4,11 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from racket_detection import detect_racket
 from racket_localization import localize_racket
+from camera_localization import localize_camera
+# Table dimensions
+table_length = 2.74  # Length in meters
+table_width = 1.51   # Width in meters
+table_height = 0  # Height of the table in meters
 
 # Camera calibration parameters
 camera_matrix = np.array([
@@ -14,17 +19,8 @@ camera_matrix = np.array([
 dist_coeffs = np.array([3.57467207, -14.86052367, -0.2714199, 0.03699078, -9.08131138])
 
 # Rotation and translation vectors (example values)
-rotM = np.array([
-    [-0.73845938, 0.6666913, -0.1009973],
-    [0.03319766, -0.11365339, -0.99296567],
-    [-0.67348026, -0.73661769, 0.06179582]
-])
-tvec = np.array([[-0.5223239], [0.31568666], [2.00882128]])
+rotM, tvec = localize_camera(camera_matrix, dist_coeffs )
 
-# Table dimensions
-table_length = 2.74  # Length in meters
-table_width = 1.51   # Width in meters
-table_height = 0.76  # Height of the table in meters
 
 def draw_table(ax):
     """
@@ -74,6 +70,9 @@ def main(video_path):
     fig = plt.figure(figsize=(10, 7))
     ax = fig.add_subplot(111, projection='3d')
 
+   # Set Z-axis limits
+    ax.set_zlim(-0.76, 2)  # Updated Z-axis limits
+    
     # Draw the table on the plot
     draw_table(ax)
 
@@ -151,5 +150,5 @@ def main(video_path):
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    video_path = "../data/input/Black_red_rigth2_45_play.mp4"  
+    video_path = "../../data/input/Black_red_rigth2_45_play.mp4"  # Replace with your video file
     main(video_path)
