@@ -77,11 +77,12 @@ def main_countour(image_path):
         all_points_3d = np.concatenate((contour_points_3d, line_points_3d), axis=0)
 
         # Calculate the center of contour points
+        center_all = np.mean(all_points_3d, axis=0)
         center_contour = np.mean(contour_points_3d, axis=0)
         print(f"Center of Contour Points (3D): {center_contour}")
 
         # Fit ellipse and compute angles
-        best_angles = fit_ellipse_to_contour(all_points_3d, ellipse_a, ellipse_b, y_cutoff, center_contour)
+        best_angles = fit_ellipse_to_contour(all_points_3d, ellipse_a, ellipse_b, y_cutoff, center_all)
         print(f"Optimal Angles (Degrees): Roll={best_angles[0]:.2f}, Pitch={best_angles[1]:.2f}, Yaw={best_angles[2]:.2f}")
         
         # Plot the 3D data and compute orientation
@@ -97,5 +98,5 @@ def main_countour(image_path):
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    image_path = os.path.join(os.path.dirname(__file__), '../data/frame_0003.png')
+    image_path = os.path.join(os.path.dirname(__file__), '../data/frame_0002.png')
     main_countour(image_path)

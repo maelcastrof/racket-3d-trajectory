@@ -92,8 +92,8 @@ def detect_racket_contour(frame, distance_threshold=10):
 
     # Detect lines using the Hough Transform
    #lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=2, minLineLength=50, maxLineGap=15) #Frame 0001
-   #lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=2, minLineLength=70, maxLineGap=20) #Frame 0002
-    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=3, minLineLength=70, maxLineGap=20)
+    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=2, minLineLength=50, maxLineGap=10) #Frame 0002
+   # lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=3, minLineLength=70, maxLineGap=20) #Frame 0003
 
     # Initialize a list to store line points
     line_points = []
